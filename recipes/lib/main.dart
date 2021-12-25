@@ -1,22 +1,25 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:recipes/recipe.dart';
+import 'package:recipes/recipe_detail.dart';
 
-Map<int, Color> colorWhite =
-{
-  50:const Color.fromRGBO(255, 255, 255, .1),
-  100:const Color.fromRGBO(255, 255, 255, .2),
-  200:const Color.fromRGBO(255, 255, 255, .3),
-  300:const Color.fromRGBO(255, 255, 255, .4),
-  400:const Color.fromRGBO(255, 255, 255, .5),
-  500:const Color.fromRGBO(255, 255, 255, .6),
-  600:const Color.fromRGBO(255, 255, 255, .7),
-  700:const Color.fromRGBO(255, 255, 255, .8),
-  800:const Color.fromRGBO(255, 255, 255, .9),
-  900:const Color.fromRGBO(255, 255, 255, 1),
+Map<int, Color> colorWhite = {
+  50: const Color.fromRGBO(255, 255, 255, .1),
+  100: const Color.fromRGBO(255, 255, 255, .2),
+  200: const Color.fromRGBO(255, 255, 255, .3),
+  300: const Color.fromRGBO(255, 255, 255, .4),
+  400: const Color.fromRGBO(255, 255, 255, .5),
+  500: const Color.fromRGBO(255, 255, 255, .6),
+  600: const Color.fromRGBO(255, 255, 255, .7),
+  700: const Color.fromRGBO(255, 255, 255, .8),
+  800: const Color.fromRGBO(255, 255, 255, .9),
+  900: const Color.fromRGBO(255, 255, 255, 1),
 };
 
 extension ColorWhiteExtension on Colors {
-  static MaterialColor get whiteMaterial => MaterialColor(0xFFFFFFFF, colorWhite);
+  static MaterialColor get whiteMaterial =>
+      MaterialColor(0xFFFFFFFF, colorWhite);
 }
 
 void main() {
@@ -28,10 +31,14 @@ class RecipeApp extends StatelessWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) { //turunan untuk buat widget.
-    return MaterialApp( //ini untuk menggunakan material design (wajib)
-      title: 'Recipe Calculator', //ui tidak tampilin ini, cuman aplikasi yang diinstal namanya jadi sepert ini
-      theme: ThemeData( //theme untuk menentukan primary color dan accent color
+  Widget build(BuildContext context) {
+    //turunan untuk buat widget.
+    return MaterialApp(
+      //ini untuk menggunakan material design (wajib)
+      title:
+          'Recipe Calculator', //ui tidak tampilin ini, cuman aplikasi yang diinstal namanya jadi sepert ini
+      theme: ThemeData(
+        //theme untuk menentukan primary color dan accent color
         primarySwatch: ColorWhiteExtension.whiteMaterial,
         accentColor: Colors.black,
       ),
@@ -59,47 +66,58 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  Widget buildRecipeCard(Recipe recipe)
-    => Card(
-      color: Colors.amber,
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      elevation: 2.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0)
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            Image(image: AssetImage(recipe.imageUrl)),
-            const SizedBox(
-              height: 14.0,
-            ),
-            Text(
-                recipe.label,
-                style: const TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Palatino'
-                )
-            ),
-          ],
+  Widget buildRecipeCard(Recipe recipe) => Card(
+        color: Colors.amber,
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        elevation: 2.0,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              Image(image: AssetImage(recipe.imageUrl)),
+              const SizedBox(
+                height: 14.0,
+              ),
+              Text(recipe.label,
+                  style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Palatino')),
+            ],
+          ),
         ),
-      ),
-    );
+      );
 
   @override
-  Widget build(BuildContext context) => Scaffold( //Scaffold menyediakan high-level struktur untuk app
-    appBar: AppBar(
-      title: Text(widget.title),
-    ),
-    body: SafeArea( //ini untuk menjaga area yang safe pada setiap devices (penting)
+  Widget build(BuildContext context) {
+    return Scaffold(
+      //Scaffold menyediakan high-level struktur untuk app
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: SafeArea(
+        //ini untuk menjaga area yang safe pada setiap devices (penting)
         child: ListView.builder(
           itemCount: Recipe.samples.length,
-          itemBuilder: (BuildContext context, int index)
-            => buildRecipeCard(Recipe.samples[index])
+          itemBuilder: (BuildContext context, int index) => GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return RecipeDetail(
+                      recipe: Recipe.samples[index],
+                    );
+                  },
+                ),
+              );
+            },
+            child: buildRecipeCard(Recipe.samples[index]),
+          ),
         ), //yah container...
-    )
-  );
+      ),
+    );
+  }
 }
